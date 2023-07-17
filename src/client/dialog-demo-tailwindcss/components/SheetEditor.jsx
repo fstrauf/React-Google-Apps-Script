@@ -37,7 +37,7 @@ const SheetEditor = () => {
   return (
     <div>
       <p>
-        <b>☀️ React demo! ☀️</b>
+        <b className='text-6xl'>☀️ React demo! ☀️</b>
       </p>
       <p>
         This is a sample page that demonstrates a simple React app. Enter a name
