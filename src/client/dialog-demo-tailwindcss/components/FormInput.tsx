@@ -1,34 +1,84 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-const FormInput = ({ submitNewSheet }) => {
-  const [inputValue, setInputValue] = useState('');
+const FormInput = ({ getSheetData, runReplicate, checkForUpdates }) => {
 
-  const handleChange = (event) => setInputValue(event.target.value);
+  const [stateText, setStateText] = useState('');
+  const [isChecking, setIsChecking] = useState(false);
 
-  const handleSubmit = (event) => {
+  useEffect(() => {
+    let intervalId;
+    if (isChecking) {
+      intervalId = setInterval(async () => {
+        const updatetext = await checkForUpdates()
+        console.log("🚀 ~ file: FormInput.tsx:15 ~ intervalId=setInterval ~ updatetext:", updatetext)
+        setStateText(updatetext);
+      }, 10000);
+    }
+
+    return () => clearInterval(intervalId);
+  }, [checkForUpdates, isChecking]);
+
+  const trainExpenses = async (event) => {
     event.preventDefault();
-    if (inputValue.length === 0) return;
 
-    submitNewSheet(inputValue);
-    setInputValue('');
+    const sheetData = await getSheetData('classified expenses', 'B2:B');
+    setStateText('fetched sheet data')
+    const cleanedSheetData = sheetData.flat().filter((item) => item !== '');
+    console.log(
+      '🚀 ~ file: FormInput.tsx:21 ~ handleSubmit ~ cleanedTrainedData:',
+      cleanedSheetData
+    );
+
+    const res = await runReplicate(cleanedSheetData, 'saveTrainedData','trained_embeddings', 'AKfycby3MVHQKrMBzDVeWKxy77gdvuWhXa-m-LUMnvoqLHrcHcJg53FzEeDLd-GaXLSeA8zM');
+    setStateText('data is being trained')
+    setIsChecking(true);
+    console.log('🚀 ~ file: FormInput.tsx:22 ~ handleSubmit ~ res:', res);
+
+  };
+
+  const classifyExpenses = async (event) => {
+    event.preventDefault();
+
+    const sheetData = await getSheetData('new expenses', 'A2:A');
+    setStateText('fetched sheet data')
+    const cleanedSheetData = sheetData.flat().filter((item) => item !== '');
+    console.log(
+      '🚀 ~ file: FormInput.tsx:21 ~ handleSubmit ~ cleanedTrainedData:',
+      cleanedSheetData
+    );
+
+    const res = await runReplicate(cleanedSheetData,'classify','trained_embeddings', 'AKfycby3MVHQKrMBzDVeWKxy77gdvuWhXa-m-LUMnvoqLHrcHcJg53FzEeDLd-GaXLSeA8zM');
+    setStateText('data is being classified')
+    setIsChecking(true);
+
+    console.log('🚀 ~ file: FormInput.tsx:22 ~ handleSubmit ~ res:', res);
+
   };
 
   return (
-    <form className="flex w-full mx-auto items-center" onSubmit={handleSubmit}>
-      <div className="grow pr-2 py-1">
-        <input
-            className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-transparent focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 transition-colors duration-200 ease-in-out"
-            onChange={handleChange}
-            value={inputValue}
-            placeholder="New sheet name"
-        />
+    <div className="flex flex-col gap-5 w-full mx-auto items-center">
+      <div className="flex gap-3">
+        {' '}
+        <button
+          className="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded"
+          type="button"
+          onClick={trainExpenses}
+        >
+          Train Expenses
+        </button>
+        <button
+          className="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded"
+          type="button"
+          onClick={classifyExpenses}
+        >
+          Classify Expenses
+        </button>
       </div>
-      <button
-        className="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded" 
-        type="submit"
-      >Add Sheet</button>
-    </form>
+      <div>
+        {stateText}
+      </div>
+   </div>
   );
 };
 

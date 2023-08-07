@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "types": ["gas-types-detailed"],
+    "types": ["gas-types-detailed", "node"],
     "jsx": "react",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "lib": ["dom", "dom.iterable", "esnext", "ES2015"],
   }
 }

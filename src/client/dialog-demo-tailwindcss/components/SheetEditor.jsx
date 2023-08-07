@@ -1,66 +1,53 @@
-import React, { useState, useEffect } from 'react';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import React from 'react';
 import FormInput from './FormInput';
-import SheetButton from './SheetButton';
 
 // This is a wrapper for google.script.run that lets us use promises.
 import { serverFunctions } from '../../utils/serverFunctions';
 
 const SheetEditor = () => {
-  const [names, setNames] = useState([]);
-
-  useEffect(() => {
-    // Call a server global function here and handle the response with .then() and .catch()
-    serverFunctions.getSheetsData().then(setNames).catch(alert);
-  }, []);
-
-  const deleteSheet = (sheetIndex) => {
-    serverFunctions.deleteSheet(sheetIndex).then(setNames).catch(alert);
-  };
-
-  const setActiveSheet = (sheetName) => {
-    serverFunctions.setActiveSheet(sheetName).then(setNames).catch(alert);
-  };
-
-  // You can also use async/await notation for server calls with our server wrapper.
-  // (This does the same thing as .then().catch() in the above handlers.)
-  const submitNewSheet = async (newSheetName) => {
+  const getSheetData = async (sheetName, range) => {
+    let res = {};
     try {
-      const response = await serverFunctions.addSheet(newSheetName);
-      setNames(response);
+      res = await serverFunctions.getSheetData(sheetName, range);
+      // setSheetData(trainedData);
     } catch (error) {
-      // eslint-disable-next-line no-alert
       alert(error);
     }
+    return res;
+  };
+
+  const runReplicate = async (trainedData, apiMode, customerName, sheetApi) => {
+    let res;
+    try {
+      res = await serverFunctions.createPrediction(
+        trainedData,
+        apiMode,
+        customerName,
+        sheetApi
+      );
+    } catch (error) {
+      alert(error);
+      console.log(
+        '🚀 ~ file: SheetEditor.jsx:40 ~ runReplicate ~ error:',
+        error
+      );
+    }
+    return res;
+  };
+
+  const checkForUpdates = () => {
+    return serverFunctions.checkForUpdates();
   };
 
   return (
     <div>
-      <p>
-        <b className='text-6xl'>☀️ React demo! ☀️</b>
-      </p>
-      <p>
-        This is a sample page that demonstrates a simple React app. Enter a name
-        for a new sheet, hit enter and the new sheet will be created. Click the
-        red &times; next to the sheet name to delete it.
-      </p>
-      <FormInput submitNewSheet={submitNewSheet} />
-      <TransitionGroup className="sheet-list">
-        {names.length > 0 &&
-          names.map((name) => (
-            <CSSTransition
-              classNames="sheetNames"
-              timeout={500}
-              key={name.name}
-            >
-              <SheetButton
-                sheetDetails={name}
-                deleteSheet={deleteSheet}
-                setActiveSheet={setActiveSheet}
-              />
-            </CSSTransition>
-          ))}
-      </TransitionGroup>
+      <h1 className="text-2xl my-5">Expense Classifier</h1>
+
+      <FormInput
+        getSheetData={getSheetData}
+        runReplicate={runReplicate}
+        checkForUpdates={checkForUpdates}
+      />
     </div>
   );
 };
