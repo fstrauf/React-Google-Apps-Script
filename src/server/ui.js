@@ -1,7 +1,7 @@
 export const onOpen = () => {
   const menu = SpreadsheetApp.getUi()
     .createMenu('Expense Sorter') 
-    .addItem('Screen App', 'openDialogTailwindCSS')
+    // .addItem('Screen App', 'openDialogTailwindCSS')
     .addItem('Sidebar App', 'openAboutSidebar')
     .addItem('Configuration', 'openConfigSidebar');
 
