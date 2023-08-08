@@ -46,35 +46,17 @@ const devDialogEntry = './dev/index.js';
 
 // define client entry points and output names
 const clientEntrypoints = [
-  // {
-  //   name: 'CLIENT - Dialog Demo',
-  //   entry: './src/client/dialog-demo/index.js',
-  //   filename: 'dialog-demo', // we'll add the .html suffix to these
-  //   template: './src/client/dialog-demo/index.html',
-  // },
-  // {
-  //   name: 'CLIENT - Dialog Demo Bootstrap',
-  //   entry: './src/client/dialog-demo-bootstrap/index.js',
-  //   filename: 'dialog-demo-bootstrap',
-  //   template: './src/client/dialog-demo-bootstrap/index.html',
-  // },
-  // {
-  //   name: 'CLIENT - Dialog Demo MUI',
-  //   entry: './src/client/dialog-demo-mui/index.js',
-  //   filename: 'dialog-demo-mui',
-  //   template: './src/client/dialog-demo-mui/index.html',
-  // },
   {
-    name: 'CLIENT - Dialog Demo Tailwind CSS',
-    entry: './src/client/dialog-demo-tailwindcss/index.js',
-    filename: 'dialog-demo-tailwindcss',
-    template: './src/client/dialog-demo-tailwindcss/index.html',
+    name: 'CLIENT - Main Screen',
+    entry: './src/client/main-screen/index.js',
+    filename: 'main-screen',
+    template: './src/client/main-screen/index.html',
   },
   {
-    name: 'CLIENT - Sidebar About Page',
-    entry: './src/client/sidebar-about-page/index.js',
-    filename: 'sidebar-about-page',
-    template: './src/client/sidebar-about-page/index.html',
+    name: 'CLIENT - Configuration Screen',
+    entry: './src/client/config-screen/index.js',
+    filename: 'config-screen',
+    template: './src/client/config-screen/index.html',
   },
 ];
 

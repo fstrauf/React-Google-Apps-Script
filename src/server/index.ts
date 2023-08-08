@@ -5,9 +5,22 @@ import {
   openDialogMUI,
   openDialogTailwindCSS,
   openAboutSidebar,
+  openConfigSidebar,
 } from './ui';
 
-import { getSheetsData, addSheet, deleteSheet, setActiveSheet, getSheetData, createPrediction, doPost, doGet, checkForUpdates } from './sheets';
+import {
+  getSheetsData,
+  addSheet,
+  deleteSheet,
+  setActiveSheet,
+  getSheetData,
+  createPrediction,
+  doPost,
+  doGet,
+  checkForUpdates,
+  updateConfig,
+  getConfig
+} from './sheets';
 
 // Public functions must be exported as named exports
 export {
@@ -25,5 +38,8 @@ export {
   createPrediction,
   doPost,
   doGet,
-  checkForUpdates
+  checkForUpdates,
+  openConfigSidebar,
+  updateConfig,
+  getConfig
 };
