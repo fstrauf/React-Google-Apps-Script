@@ -41,8 +41,8 @@ const SheetEditor = () => {
   };
 
   return (
-    <div>
-      <h1 className="text-2xl my-5">Expense Classifier</h1>
+    <div className='p-2'>
+      <h1 className="text-2xl my-5 text-center">Expense Sorter</h1>
 
       <FormInput
         getSheetData={getSheetData}
