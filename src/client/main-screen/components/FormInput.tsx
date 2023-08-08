@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-const FormInput = ({ getSheetData, runReplicate, checkForUpdates }) => {
+const FormInput = ({ getSheetData, runReplicate, checkForUpdates, serverFunctions }) => {
 
   const [stateText, setStateText] = useState('');
   const [isChecking, setIsChecking] = useState(false);
@@ -11,7 +11,6 @@ const FormInput = ({ getSheetData, runReplicate, checkForUpdates }) => {
     if (isChecking) {
       intervalId = setInterval(async () => {
         const updatetext = await checkForUpdates()
-        console.log("🚀 ~ file: FormInput.tsx:15 ~ intervalId=setInterval ~ updatetext:", updatetext)
         setStateText(updatetext);
       }, 10000);
     }
@@ -22,38 +21,46 @@ const FormInput = ({ getSheetData, runReplicate, checkForUpdates }) => {
   const trainExpenses = async (event) => {
     event.preventDefault();
 
-    const sheetData = await getSheetData('classified expenses', 'B2:B');
+    const configData = await serverFunctions.getConfig();
+    console.log("🚀 ~ file: FormInput.tsx:25 ~ trainExpenses ~ configData:", configData)
+    // console.log("🚀 ~ file: FormInput.tsx:26 ~ trainExpenses ~ fetchedData:", fetchedData)
+    if(!configData?.classifiedExpensesSheet || !configData?.classifiedExpensesRange){
+      setStateText('Please configure first')
+      return null
+    }
+
+    const sheetData = await getSheetData(configData?.classifiedExpensesSheet, configData?.classifiedExpensesRange);
     setStateText('fetched sheet data')
     const cleanedSheetData = sheetData.flat().filter((item) => item !== '');
-    console.log(
-      '🚀 ~ file: FormInput.tsx:21 ~ handleSubmit ~ cleanedTrainedData:',
-      cleanedSheetData
-    );
 
-    const res = await runReplicate(cleanedSheetData, 'saveTrainedData','trained_embeddings', 'AKfycby3MVHQKrMBzDVeWKxy77gdvuWhXa-m-LUMnvoqLHrcHcJg53FzEeDLd-GaXLSeA8zM');
+    const res = await runReplicate(cleanedSheetData, 'saveTrainedData',configData?.clientID, configData?.appScriptURL);
+    console.log("🚀 ~ file: FormInput.tsx:37 ~ trainExpenses ~ res:", res)
     setStateText('data is being trained')
     setIsChecking(true);
-    console.log('🚀 ~ file: FormInput.tsx:22 ~ handleSubmit ~ res:', res);
 
   };
 
   const classifyExpenses = async (event) => {
     event.preventDefault();
 
-    const sheetData = await getSheetData('new expenses', 'A2:A');
+    const configData = await serverFunctions.getConfig();
+    // console.log("🚀 ~ file: FormInput.tsx:26 ~ trainExpenses ~ fetchedData:", fetchedData)
+    if(!configData?.classifiedExpensesSheet || !configData?.classifiedExpensesRange){
+      setStateText('Please configure first')
+      return null
+    }
+
+    const fetchedData = await serverFunctions.getConfig();
+    console.log("🚀 ~ file: FormInput.tsx:26 ~ trainExpenses ~ fetchedData:", fetchedData)
+
+    const sheetData = await getSheetData(configData?.newExpensesSheet, configData?.newExpensesRange);
     setStateText('fetched sheet data')
     const cleanedSheetData = sheetData.flat().filter((item) => item !== '');
-    console.log(
-      '🚀 ~ file: FormInput.tsx:21 ~ handleSubmit ~ cleanedTrainedData:',
-      cleanedSheetData
-    );
 
-    const res = await runReplicate(cleanedSheetData,'classify','trained_embeddings', 'AKfycby3MVHQKrMBzDVeWKxy77gdvuWhXa-m-LUMnvoqLHrcHcJg53FzEeDLd-GaXLSeA8zM');
+    const res = await runReplicate(cleanedSheetData,'classify',configData?.clientID, configData?.appScriptURL);
+    console.log("🚀 ~ file: FormInput.tsx:61 ~ classifyExpenses ~ res:", res)
     setStateText('data is being classified')
     setIsChecking(true);
-
-    console.log('🚀 ~ file: FormInput.tsx:22 ~ handleSubmit ~ res:', res);
-
   };
 
   return (

@@ -17,6 +17,7 @@ const SheetEditor = () => {
   };
 
   const runReplicate = async (trainedData, apiMode, customerName, sheetApi) => {
+    console.log("🚀 ~ file: SheetEditor.jsx:20 ~ runReplicate ~ customerName:", customerName)
     let res;
     try {
       res = await serverFunctions.createPrediction(
@@ -47,6 +48,7 @@ const SheetEditor = () => {
         getSheetData={getSheetData}
         runReplicate={runReplicate}
         checkForUpdates={checkForUpdates}
+        serverFunctions={serverFunctions}
       />
     </div>
   );

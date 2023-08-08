@@ -118,8 +118,8 @@ export const createPrediction = (training_data, apiMode, customerName, sheetApi)
     input: {
       text_batch: JSON.stringify(training_data),
     },
-    // webhook: `https://125f-2406-2d40-40de-8200-216e-7992-fafd-a11e.ngrok-free.app/${apiMode}?customerName=${customerName}&sheetApi=${sheetApi}`,
-    webhook: `https://pythonhandler-yxxxtrqkpa-ts.a.run.app/${apiMode}?customerName=${customerName}&sheetApi=${sheetApi}`,
+    webhook: `https://125f-2406-2d40-40de-8200-216e-7992-fafd-a11e.ngrok-free.app/${apiMode}?customerName=${customerName}&sheetApi=${sheetApi}`,
+    // webhook: `https://pythonhandler-yxxxtrqkpa-ts.a.run.app/${apiMode}?customerName=${customerName}&sheetApi=${sheetApi}`,
     webhook_events_filter: ['completed'],
   };
   var options = {
@@ -161,7 +161,6 @@ export const updateConfig = (props) => {
     'classifiedExpensesSheet'
   ];
 
-  // Write the keys and values to the _config sheet in the predefined order
   for (let i = 0; i < orderedKeys.length; i++) {
     const key = orderedKeys[i];
     const value = props[key];
@@ -170,7 +169,6 @@ export const updateConfig = (props) => {
     configSheet.getRange(i + 3, 2).setValue(value);  // Write the value to column B
   }
 
-  // Return the saved values in an object
   return props;
 };
 
