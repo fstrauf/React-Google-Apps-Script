@@ -118,8 +118,8 @@ export const createPrediction = (training_data, apiMode, customerName, sheetApi)
     input: {
       text_batch: JSON.stringify(training_data),
     },
-    webhook: `https://125f-2406-2d40-40de-8200-216e-7992-fafd-a11e.ngrok-free.app/${apiMode}?customerName=${customerName}&sheetApi=${sheetApi}`,
-    // webhook: `https://pythonhandler-yxxxtrqkpa-ts.a.run.app/${apiMode}?customerName=${customerName}&sheetApi=${sheetApi}`,
+    // webhook: `https://125f-2406-2d40-40de-8200-216e-7992-fafd-a11e.ngrok-free.app/${apiMode}?customerName=${customerName}&sheetApi=${sheetApi}`,
+    webhook: `https://pythonhandler-yxxxtrqkpa-ts.a.run.app/${apiMode}?customerName=${customerName}&sheetApi=${sheetApi}`,
     webhook_events_filter: ['completed'],
   };
   var options = {
