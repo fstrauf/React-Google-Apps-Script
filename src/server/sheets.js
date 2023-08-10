@@ -2,7 +2,7 @@ function getSecret() {
 
     let token = ScriptApp.getOAuthToken();
 
-    var url ='https://secretmanager.googleapis.com/v1/projects/579095970614/secrets/replicate_API_KEY/versions/1:access'
+    var url ='https://secretmanager.googleapis.com/v1/projects/579095970614/secrets/replicate_API_KEY/versions/2:access'
     var headers = {
         'Authorization': 'Bearer ' + token
     };
